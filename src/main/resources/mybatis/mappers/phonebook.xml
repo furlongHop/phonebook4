@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="phonebook">
+	
+	<!-- 문장 마지막에 ; 쓰지 않는다. 주의. -->
+	<!-- 전체 리스트 가져오기 : db에서 가져온 데이터를 resultType에 위치한 타입에 넣어준다.-->
+	<select id="selectList" resultType="com.javaex.vo.PersonVo">
+		<![CDATA[
+        select  person_id personId,
+                 name, 
+                 hp,
+                 company
+        from person
+        order by person_id desc
+    	 ]]>
+	</select>
+
+	<!-- 작은 따옴표를 쓰지 않고 #{}안에 값을 입력한다. 알아서 ? 기호로 변환, 값 인식. -->
+	<!-- 전화번호 추가 : 파라미터값을 다음 위치에 저장된 타입에 넣어 db에 추가한다.-->
+	<insert id="insert" parameterType="com.javaex.vo.PersonVo">
+		<![CDATA[
+			insert into person
+			values(seq_person_id.nextval,
+			#{name},
+			#{hp},
+			#{company})
+        ]]>        
+	</insert>
+
+	<!-- 변수가 하나일 경우 parameterType에 타입 하나만 적어도 알아서 찾는다. -->
+	<!-- 전화번호 삭제 -->
+	<delete id="delete" parameterType="int">
+		<![CDATA[
+			delete from person
+			where person_id = #{personId}
+        ]]>
+	</delete>
+
+
+	<!-- 전화번호 하나 가져오기 -->
+	<select id="selectOne" parameterType="int" resultType="com.javaex.vo.PersonVo">
+		<![CDATA[
+			select person_id personId,
+				   name,
+				   hp,
+				   company
+			from   person
+			where person_id = #{personId}
+        ]]>
+	</select>
+
+	<!-- 전화번호 수정하기 -->
+	<update id="update" parameterType="com.javaex.vo.PersonVo">
+		<![CDATA[
+			update person
+			set	   name = #{name} ,
+				   hp = #{hp} ,
+				   company = #{company}
+			where person_id = #{personId}
+        ]]>
+	</update>
+
+</mapper>
