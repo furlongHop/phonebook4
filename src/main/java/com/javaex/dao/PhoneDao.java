@@ -41,19 +41,19 @@ public class PhoneDao {
 	}
 
 	public int personInsert2(String name, String hp, String company) {
-		System.out.println("PhoneDao.personInsert: 파라미터 여러 개를 받을 때");
+		System.out.println("PhoneDao.personInsert2: 파라미터 여러 개를 받을 때");
 
-		// Map 쓰는 상황: PersonVo를 생성해야 하는데 이곳에만 쓰일 것 같아 필드로 올리기도 애매할 때
+		// Map 쓰는 상황: PersonVo를 생성해야 하는데 이곳에만 쓰일 것 같아 필드로 올리기도 애매할 때,Vo 사용 없이 해결
 
-		// Map 쓰는 법(02.java>04.자바 컬렉션 프레임 워크): Map<key,value>
+		// Map 쓰는 법(02.java>04.자바 컬렉션 프레임 워크): Map<key(자료형),value(자료형)>
 		Map<String, String> personMap = new HashMap<String, String>();
-		personMap.put("name", name);
+		personMap.put("name", name);//(key,value)→insert: #{key}
 		personMap.put("hp", hp);
 		personMap.put("company", company);
 
-		int count = sqlSession.insert("phonebook.insert2", personMap);
+		sqlSession.insert("phonebook.insert2", personMap);
 
-		return count;
+		return 0;
 	}
 	
 
@@ -83,10 +83,12 @@ public class PhoneDao {
 	public PersonVo getPerson2(int personId) {
 		System.out.println("PhoneDao.getPerson2()");
 
-		//<String, Object>로 둔 이유: value 타입을 String으로 두면 person_id의 경우 오류가 난다.
+		//<String, Object>로 둔 이유: value 자료형을 String으로 두면 person_id(자료형:int)의 경우 오류가 난다.
+		//value 값들의 자료형들이 다양할 경우 Object로 표기한다.
 		Map<String, Object> personMap = sqlSession.selectOne("phonebook.selectPerson", personId);
 		System.out.println(personMap.keySet());//순서 무작위로 저장된 값 가져오기(키 세트)
 
+		//Map으로 리턴될 경우 key값은 컬럼명(대문자)으로 저장(put)되어 있다. Map으로 저장된 value값을 호출하고 싶을 땐 get 사용.
 		System.out.println(personMap.get("PERSON_ID"));
 		System.out.println(personMap.get("NAME"));
 		System.out.println(personMap.get("HP"));

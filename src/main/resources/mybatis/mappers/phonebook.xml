@@ -15,7 +15,7 @@
 	
 	
 	<!-- 문장 마지막에 ; 쓰지 않는다. 주의. -->
-	<!-- 전체 리스트 가져오기 : db에서 가져온 데이터를 resultType에 위치한 타입에 넣어준다.-->
+	<!-- resultMap: mapping해줄 resultMap을 찾아간다. -->
 	<select id="selectList" resultMap="resultMapPersonVo">
 		<![CDATA[
         select  person_id,
@@ -40,7 +40,7 @@
 	</insert>
 	
 	<!-- Map을 이용한 insert → #{key}: Dao의 insert 메소드에서 지정한 key 이름을 넣는다. Vo를 사용하는 게 아니라 getter 사용X-->
-	<insert id="insert" parameterType="map">
+	<insert id="insert2" parameterType="map">
 		<![CDATA[
 			insert into person
 			values(seq_person_id.nextval, #{name}, #{hp}, #{company})
