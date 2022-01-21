@@ -2,7 +2,10 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
+
+	<!-- type에 든 값에 alias라는 별명을 붙여준다.(컬럼명에 별명 붙이는 개념) -->
     <typeAliases>
+    	<typeAlias alias="PersonVo" type="com.javaex.vo.PersonVo" />
     </typeAliases>
 
     <mappers>

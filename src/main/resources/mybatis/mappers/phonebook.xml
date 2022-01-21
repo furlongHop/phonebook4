@@ -3,11 +3,22 @@
 
 <mapper namespace="phonebook">
 	
+	
+	<!-- column명과 resultType의(PersonVo) 필드명이 다른 경우 맞춰주는 기능(별명 사용할 필요x): resultMap  -->
+	<!-- 사용할 때엔 resultType="com.javaex.vo.PersonVo" 대신 resultMap="resultMapPersonVo" 삽입-->
+	<resultMap id="resultMapPersonVo" type="PersonVo">
+		<result column="person_id" property="personId"/>
+		<result column="name" property="name" />
+    	<result column="hp" property="hp" />
+    	<result column="company" property="company" />
+	</resultMap>
+	
+	
 	<!-- 문장 마지막에 ; 쓰지 않는다. 주의. -->
 	<!-- 전체 리스트 가져오기 : db에서 가져온 데이터를 resultType에 위치한 타입에 넣어준다.-->
-	<select id="selectList" resultType="com.javaex.vo.PersonVo">
+	<select id="selectList" resultMap="resultMapPersonVo">
 		<![CDATA[
-        select  person_id personId,
+        select  person_id,
                  name, 
                  hp,
                  company
@@ -18,7 +29,7 @@
 
 	<!-- 작은 따옴표를 쓰지 않고 #{}안에 값을 입력한다. 알아서 ? 기호로 변환, 값 인식. -->
 	<!-- 전화번호 추가 : 파라미터값을 다음 위치에 저장된 타입에 넣어 db에 추가한다.-->
-	<insert id="insert" parameterType="com.javaex.vo.PersonVo">
+	<insert id="insert" parameterType="PersonVo">
 		<![CDATA[
 			insert into person
 			values(seq_person_id.nextval,
@@ -27,6 +38,16 @@
 			#{company})
         ]]>        
 	</insert>
+	
+	<!-- Map을 이용한 insert → #{key}: Dao의 insert 메소드에서 지정한 key 이름을 넣는다. Vo를 사용하는 게 아니라 getter 사용X-->
+	<insert id="insert" parameterType="map">
+		<![CDATA[
+			insert into person
+			values(seq_person_id.nextval, #{name}, #{hp}, #{company})
+        ]]>        
+	</insert>
+
+
 
 	<!-- 변수가 하나일 경우 parameterType에 타입 하나만 적어도 알아서 찾는다. -->
 	<!-- 전화번호 삭제 -->
@@ -39,7 +60,7 @@
 
 
 	<!-- 전화번호 하나 가져오기 -->
-	<select id="selectOne" parameterType="int" resultType="com.javaex.vo.PersonVo">
+	<select id="selectOne" parameterType="int" resultType="PersonVo">
 		<![CDATA[
 			select person_id personId,
 				   name,
@@ -49,9 +70,22 @@
 			where person_id = #{personId}
         ]]>
 	</select>
+	
+	<select id="selectPerson" parameterType="int" resultType="map">
+		<![CDATA[
+			select  person_id,
+	        		name,
+	        		hp,
+	        		company
+			from person
+			where person_id = #{personId}
+		]]>
+	</select>
+	
+	
 
 	<!-- 전화번호 수정하기 -->
-	<update id="update" parameterType="com.javaex.vo.PersonVo">
+	<update id="update" parameterType="PersonVo">
 		<![CDATA[
 			update person
 			set	   name = #{name} ,

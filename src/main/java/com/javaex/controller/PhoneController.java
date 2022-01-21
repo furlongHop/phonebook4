@@ -67,6 +67,26 @@ public class PhoneController {
 	}
 	
 	
+	@RequestMapping(value="/write2", method= {RequestMethod.GET, RequestMethod.POST} )
+	public String write2(@RequestParam("name") String name,
+						 @RequestParam("hp") String hp,
+						 @RequestParam("company") String company
+			) {
+		System.out.println("PhoneController>write2()");
+		
+		//저장
+		phoneDao.personInsert2(name, hp, company);
+		
+		//리다이렉트
+		return "redirect:/phone/list";
+	}
+	
+	
+	
+	
+	
+	
+	
 	@RequestMapping(value="/delete",method= {RequestMethod.GET,RequestMethod.POST})
 	public String delete(@RequestParam("id") int personId) {
 		System.out.println("PhoneController>delete");
